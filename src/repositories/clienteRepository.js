@@ -65,21 +65,21 @@ const clienteRepository = {
     },
     //SELECT(get)
     selecionar: async () => {
-        const sql = `SELECT c.id AS clienteId, c.nome, c.cpf, c.dataCad, e.cep, e.logradouro, e.numero, e.complemento, e.bairro, e.cidade, e.uf, t.telefone
-        FROM clientes c
-        LEFT JOIN enderecos e ON e.idCliente = c.id
-        LEFT JOIN telefones t ON t.idCliente = c.id
+        const sql = `SELECT *
+        FROM clientes AS c
+        INNER JOIN enderecos e 
+            ON e.idCliente = c.id
+        INNER JOIN telefones t 
+            ON t.idCliente = c.id
         ORDER BY c.id;
         `;
+        //order para organizar pelo id
 
         const [rows] = await connection.execute(sql);
-
         const clientes = [];
-
         for (const row of rows) {
             // procura p achar se já existe esse cliente no array q guarda esses valores do cliente
             let cliente = clientes.find(c => c.id === row.clienteId);
-
 
             if (!cliente) {
                 cliente = {
